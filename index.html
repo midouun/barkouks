@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بركوكس كليكر</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background-color: #1e1e1e; color: white; font-family: sans-serif; text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; overflow: hidden; }
+        .score { font-size: 48px; font-weight: bold; color: #f1c40f; margin-bottom: 20px; }
+        .circle { width: 200px; height: 200px; background: radial-gradient(circle, #e67e22, #d35400); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px rgba(230, 126, 34, 0.5); cursor: pointer; transition: transform 0.1s; user-select: none; }
+        .circle:active { transform: scale(0.95); }
+        .circle img { width: 70%; pointer-events: none; }
+        h2 { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h2>بركوكس بالحليب 🥘</h2>
+    <div class="score" id="score">0</div>
+    <div class="circle" onclick="clickMine()">
+        <span style="font-size: 80px;">🍲</span>
+    </div>
+    <p>اضغط للأكل!</p>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        let count = 0;
+        const scoreEl = document.getElementById('score');
+        function clickMine() {
+            count++;
+            scoreEl.innerText = count;
+            tg.HapticFeedback.impactOccurred('medium');
+        }
+    </script>
+</body>
+</html>
