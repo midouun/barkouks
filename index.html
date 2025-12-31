@@ -6,31 +6,237 @@
     <title>بركوكس كليكر</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background-color: #1e1e1e; color: white; font-family: sans-serif; text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; overflow: hidden; }
-        .score { font-size: 48px; font-weight: bold; color: #f1c40f; margin-bottom: 20px; }
-        .circle { width: 200px; height: 200px; background: radial-gradient(circle, #e67e22, #d35400); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px rgba(230, 126, 34, 0.5); cursor: pointer; transition: transform 0.1s; user-select: none; }
-        .circle:active { transform: scale(0.95); }
-        .circle img { width: 70%; pointer-events: none; }
-        h2 { margin-bottom: 5px; }
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --main-color: #f1c40f;
+            --btn-color: #0f3460;
+            --text-color: #ffffff;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* رأس الصفحة */
+        .header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        h1 { margin: 0; font-size: 24px; color: var(--main-color); }
+        .balance { font-size: 42px; font-weight: bold; margin-top: 10px; }
+        .currency { font-size: 18px; color: #a29bfe; }
+
+        /* منطقة اللعبة */
+        .game-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /* زر البركوكس الرئيسي */
+        .clicker-btn {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, #e67e22, #d35400);
+            border-radius: 50%;
+            border: 8px solid #c0392b;
+            box-shadow: 0 0 40px rgba(230, 126, 34, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.05s;
+            position: relative;
+            z-index: 10;
+        }
+        .clicker-btn:active { transform: scale(0.95); }
+        .clicker-icon { font-size: 100px; }
+
+        /* تأثير الأرقام الطائرة */
+        .floating-text {
+            position: absolute;
+            color: #fff;
+            font-weight: bold;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+
+        /* المتجر والترقيات */
+        .shop-container {
+            width: 90%;
+            background-color: var(--card-bg);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+        .shop-title { font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .upgrade-info { text-align: right; }
+        .upgrade-name { font-weight: bold; font-size: 16px; }
+        .upgrade-cost { color: #f1c40f; font-size: 14px; }
+        
+        .buy-btn {
+            background-color: var(--main-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .buy-btn:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+
     </style>
 </head>
 <body>
-    <h2>بركوكس بالحليب 🥘</h2>
-    <div class="score" id="score">0</div>
-    <div class="circle" onclick="clickMine()">
-        <span style="font-size: 80px;">🍲</span>
+
+    <div class="header">
+        <h1>مطبخ البركوكس 🇩🇿</h1>
+        <div class="balance" id="score">0</div>
+        <div class="currency">حبة بركوكس</div>
     </div>
-    <p>اضغط للأكل!</p>
+
+    <div class="game-area">
+        <div class="clicker-btn" id="clickBtn">
+            <span class="clicker-icon">🍲</span>
+        </div>
+    </div>
+
+    <div class="shop-container">
+        <div class="shop-title">🛒 الدكان (الترقيات)</div>
+        
+        <div class="upgrade-item">
+            <button class="buy-btn" id="buyMilkBtn" onclick="buyMilk()">شراء</button>
+            <div class="upgrade-info">
+                <div class="upgrade-name">🥛 زيد الحليب (Lben)</div>
+                <div class="upgrade-cost">السعر: <span id="milkCost">50</span> حبة</div>
+                <div style="font-size: 12px; color: #aaa;">يزيد +1 في كل ضغطة</div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 1. تهيئة تليجرام
         const tg = window.Telegram.WebApp;
-        tg.expand();
-        let count = 0;
-        const scoreEl = document.getElementById('score');
-        function clickMine() {
-            count++;
-            scoreEl.innerText = count;
-            tg.HapticFeedback.impactOccurred('medium');
+        tg.expand(); // توسيع للشاشة كاملة
+
+        // 2. المتغيرات الأساسية (التي سنحفظها)
+        let gameState = {
+            score: 0,
+            clickPower: 1,
+            milkLevel: 1,
+            milkCost: 50
+        };
+
+        // 3. تحميل البيانات المحفوظة عند فتح اللعبة
+        function loadGame() {
+            const savedGame = localStorage.getItem('berkoukes_save_v1');
+            if (savedGame) {
+                gameState = JSON.parse(savedGame);
+            }
+            updateUI();
         }
+
+        // 4. دالة الحفظ
+        function saveGame() {
+            localStorage.setItem('berkoukes_save_v1', JSON.stringify(gameState));
+        }
+
+        // 5. تحديث الواجهة (الأرقام)
+        const scoreEl = document.getElementById('score');
+        const milkCostEl = document.getElementById('milkCost');
+        const buyBtn = document.getElementById('buyMilkBtn');
+
+        function updateUI() {
+            scoreEl.innerText = gameState.score;
+            milkCostEl.innerText = gameState.milkCost;
+            
+            // تفعيل أو تعطيل زر الشراء حسب الرصيد
+            if (gameState.score >= gameState.milkCost) {
+                buyBtn.disabled = false;
+                buyBtn.style.opacity = "1";
+            } else {
+                buyBtn.disabled = true;
+                buyBtn.style.opacity = "0.5";
+            }
+        }
+
+        // 6. منطق الضغط (التعدين)
+        const clickBtn = document.getElementById('clickBtn');
+        
+        clickBtn.addEventListener('click', (e) => {
+            // زيادة الرصيد
+            gameState.score += gameState.clickPower;
+            
+            // اهتزاز الهاتف
+            tg.HapticFeedback.impactOccurred('medium');
+            
+            // تأثير الرقم الطائر
+            showFloatingText(e.clientX, e.clientY, `+${gameState.clickPower}`);
+            
+            saveGame();
+            updateUI();
+        });
+
+        // 7. دالة الشراء (الترقية)
+        function buyMilk() {
+            if (gameState.score >= gameState.milkCost) {
+                gameState.score -= gameState.milkCost;     // خصم السعر
+                gameState.clickPower += 1;                 // زيادة قوة الضغطة
+                gameState.milkLevel += 1;                  // رفع المستوى
+                gameState.milkCost = Math.floor(gameState.milkCost * 1.5); // زيادة السعر للمرة القادمة
+                
+                tg.HapticFeedback.notificationOccurred('success'); // اهتزاز نجاح
+                saveGame();
+                updateUI();
+            }
+        }
+
+        // دالة مساعدة لتأثير الأرقام
+        function showFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.innerText = text;
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000); // حذف العنصر بعد ثانية
+        }
+
+        // تشغيل اللعبة عند الفتح
+        loadGame();
+
     </script>
 </body>
 </html>
