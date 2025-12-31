@@ -12,8 +12,6 @@
         :root {
             --grass-light: #8DCF56;
             --grass-dark: #7DBF46;
-            --wood-light: #E4A656;
-            --wood-dark: #A05E23;
             --sky: #AEE6F8;
         }
 
@@ -28,7 +26,7 @@
             user-select: none;
         }
 
-        /* --- الخلفية والعالم (Isometric World) --- */
+        /* --- الخلفية والعالم --- */
         .world-container {
             flex: 1;
             overflow: auto;
@@ -36,9 +34,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 60%),
-                linear-gradient(to bottom, #AEE6F8 0%, #8DCF56 40%);
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 60%), linear-gradient(to bottom, #AEE6F8 0%, #8DCF56 40%);
         }
 
         .iso-grid {
@@ -53,153 +49,106 @@
 
         /* --- البلاطات (Tiles) --- */
         .tile {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             background-color: var(--grass-light);
             border: 4px solid var(--grass-dark);
             border-radius: 4px;
             position: relative;
             transition: transform 0.1s;
             cursor: pointer;
-            box-shadow: -4px 4px 0px rgba(0,0,0,0.2); /* عمق ثلاثي الأبعاد */
+            box-shadow: -4px 4px 0px rgba(0,0,0,0.2);
         }
         .tile:active { transform: translate(-2px, 2px); box-shadow: -2px 2px 0px rgba(0,0,0,0.2); }
         
-        /* مظهر الأرض المحروثة */
         .tile.farmland { background-color: #6D4C41; border-color: #4E342E; }
+        .tile.coop { background-color: #FFCC80; border-color: #EF6C00; } /* شكل قن الدجاج */
         
-        /* المحاصيل والمباني (Sprites) */
+        /* المحاصيل والحيوانات */
         .sprite {
             position: absolute;
             top: -40px; left: -10px;
             width: 80px; height: 80px;
             pointer-events: none;
-            transform: rotateZ(45deg) rotateX(-60deg); /* تصحيح المنظور للصورة */
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
+            transform: rotateZ(45deg) rotateX(-60deg);
+            display: flex; justify-content: center; align-items: flex-end;
             font-size: 40px;
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
             transition: transform 0.3s;
         }
 
-        /* أنيميشن النمو */
-        .growing .sprite { transform: rotateZ(45deg) rotateX(-60deg) scale(0.5); opacity: 0.8; }
+        /* أنيميشن */
+        .growing .sprite { transform: rotateZ(45deg) rotateX(-60deg) scale(0.6); opacity: 0.9; }
         .ready .sprite { animation: bounce 1s infinite; cursor: grab; }
-
         @keyframes bounce {
             0%, 100% { transform: rotateZ(45deg) rotateX(-60deg) translateY(0); }
             50% { transform: rotateZ(45deg) rotateX(-60deg) translateY(-10px); }
         }
 
-        /* --- واجهة المستخدم (Wood UI) --- */
+        /* --- واجهة المستخدم --- */
         .ui-layer {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        /* الهيدر */
         .header-wood {
             pointer-events: auto;
             background: url('https://www.transparenttextures.com/patterns/wood-pattern.png'), linear-gradient(to bottom, #E4A656, #A05E23);
             border-bottom: 4px solid #5D4037;
             padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; justify-content: space-between; align-items: center;
             color: white;
             text-shadow: 1px 1px 2px #3E2723;
         }
         
-        .xp-bar-container {
-            width: 100px; height: 10px; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px;
-            border: 1px solid white;
-        }
+        .xp-bar-container { width: 100px; height: 10px; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; border: 1px solid white; }
         .xp-fill { height: 100%; background: #00E676; width: 0%; transition: width 0.5s; }
 
-        /* الأزرار العائمة */
         .action-dock {
             pointer-events: auto;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 20px;
+            display: flex; justify-content: center; gap: 15px; padding: 20px;
             background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
         }
 
         .tool-btn {
             width: 70px; height: 70px;
             background: radial-gradient(circle, #fff, #f0f0f0);
-            border: 4px solid white;
-            border-radius: 50%;
+            border: 4px solid white; border-radius: 50%;
             box-shadow: 0 5px 10px rgba(0,0,0,0.3);
             display: flex; justify-content: center; align-items: center;
-            font-size: 32px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            position: relative;
+            font-size: 32px; cursor: pointer; position: relative;
         }
-        .tool-btn.active { transform: scale(1.1) translateY(-10px); border-color: #FFD700; background: #FFF9C4; }
         .badge { position: absolute; top: 0; right: 0; background: red; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
 
-        /* القوائم المنبثقة (Modal) */
+        /* القوائم */
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            z-index: 100;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            pointer-events: auto;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 100; display: none; justify-content: center; align-items: center; pointer-events: auto;
         }
         
         .wood-panel {
             background: url('https://www.transparenttextures.com/patterns/wood-pattern.png'), #D7CCC8;
-            border: 6px solid #8D6E63;
-            border-radius: 20px;
-            padding: 20px;
-            width: 85%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
+            border: 6px solid #8D6E63; border-radius: 20px; padding: 20px;
+            width: 85%; max-width: 400px; text-align: center; position: relative;
         }
-        .wood-panel h2 { color: #3E2723; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* أزرار الطلبات */
-        .order-card {
-            background: #FFF3E0; border: 2px dashed #FFB74D; border-radius: 10px;
-            padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* زر الإغلاق */
         .close-btn {
-            position: absolute; top: -15px; right: -15px;
-            width: 35px; height: 35px; background: #e53935; color: white;
-            border-radius: 50%; border: 3px solid white; font-weight: bold;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            position: absolute; top: -15px; right: -15px; width: 35px; height: 35px;
+            background: #e53935; color: white; border-radius: 50%; border: 3px solid white;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold;
         }
 
-        /* رسائل عائمة */
         .floater {
             position: absolute; font-weight: bold; font-size: 18px; color: yellow;
             text-shadow: 0 2px 4px black; animation: floatUp 1s forwards; pointer-events: none; z-index: 200;
         }
         @keyframes floatUp { to { transform: translateY(-80px); opacity: 0; } }
-
     </style>
 </head>
 <body>
 
     <div class="world-container" id="world">
-        <div class="iso-grid" id="grid">
-            </div>
+        <div class="iso-grid" id="grid"></div>
     </div>
 
     <div class="ui-layer">
@@ -215,79 +164,34 @@
             </div>
             
             <div style="text-align:left;">
-                <div style="background:#FFF8E1; color:#3E2723; padding:5px 10px; border-radius:20px; font-weight:bold; box-shadow:0 3px 0 #CCC;">
-                    💰 <span id="coins">100</span>
-                </div>
-                <div style="background:#E0F7FA; color:#006064; padding:5px 10px; border-radius:20px; font-weight:bold; margin-top:5px; box-shadow:0 3px 0 #B2EBF2; font-size:12px;">
-                    💎 <span id="gems">5</span>
-                </div>
+                <div style="background:#FFF8E1; color:#3E2723; padding:5px 10px; border-radius:20px; font-weight:bold;">💰 <span id="coins">100</span></div>
+                <div style="background:#E0F7FA; color:#006064; padding:5px 10px; border-radius:20px; font-weight:bold; margin-top:5px; font-size:12px;">💎 <span id="gems">5</span></div>
             </div>
         </div>
 
         <div class="action-dock">
-            <div class="tool-btn" id="btn-shop" onclick="UI.openModal('shop')">
-                🏪
-                <span style="font-size:10px; position:absolute; bottom:5px;">المتجر</span>
-            </div>
-            <div class="tool-btn" id="btn-silo" onclick="UI.openModal('silo')">
-                🛖
-                <span class="badge" id="silo-count">0</span>
-                <span style="font-size:10px; position:absolute; bottom:5px;">الصومعة</span>
-            </div>
-            <div class="tool-btn" id="btn-barn" onclick="UI.openModal('barn')">
-                🏘️
-                <span class="badge" id="barn-count">0</span>
-                <span style="font-size:10px; position:absolute; bottom:5px;">المخزن</span>
-            </div>
-            <div class="tool-btn" id="btn-truck" onclick="UI.openModal('orders')">
-                🚚
-                <span class="badge">!</span>
-                <span style="font-size:10px; position:absolute; bottom:5px;">الطلبات</span>
-            </div>
+            <div class="tool-btn" onclick="UI.openModal('shop')">🏪</div>
+            <div class="tool-btn" onclick="UI.openModal('silo')">🛖 <span class="badge" id="silo-count">0</span></div>
+            <div class="tool-btn" onclick="UI.openModal('barn')">🏘️ <span class="badge" id="barn-count">0</span></div>
+            <div class="tool-btn" onclick="UI.openModal('orders')">🚚 <span class="badge">!</span></div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modal-silo">
-        <div class="wood-panel">
-            <div class="close-btn" onclick="UI.closeAll()">X</div>
-            <h2>🌱 صومعة البذور</h2>
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;" id="silo-grid"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-barn">
-        <div class="wood-panel">
-            <div class="close-btn" onclick="UI.closeAll()">X</div>
-            <h2>🥖 المخزن</h2>
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;" id="barn-grid"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-orders">
-        <div class="wood-panel">
-            <div class="close-btn" onclick="UI.closeAll()">X</div>
-            <h2>📋 طلبات الزوار</h2>
-            <div id="orders-list"></div>
-        </div>
-    </div>
-
+    <div class="modal-overlay" id="modal-silo"><div class="wood-panel"><div class="close-btn" onclick="UI.closeAll()">X</div><h2>🌱 البذور</h2><div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;" id="silo-grid"></div></div></div>
+    <div class="modal-overlay" id="modal-barn"><div class="wood-panel"><div class="close-btn" onclick="UI.closeAll()">X</div><h2>🥖 المنتجات</h2><div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;" id="barn-grid"></div></div></div>
+    <div class="modal-overlay" id="modal-orders"><div class="wood-panel"><div class="close-btn" onclick="UI.closeAll()">X</div><h2>📋 الطلبات</h2><div id="orders-list"></div></div></div>
+    
     <div class="modal-overlay" id="modal-shop">
         <div class="wood-panel">
             <div class="close-btn" onclick="UI.closeAll()">X</div>
-            <h2>🏗️ البناء والزراعة</h2>
-            <div class="order-card" onclick="Game.buyPlot()">
-                <div style="font-size:30px;">🟫</div>
-                <div>أرض زراعية<br><small>50 قطعة ذهبية</small></div>
+            <h2>🏗️ المتجر</h2>
+            <div style="background:#FFF3E0; padding:10px; margin:5px; border-radius:10px; cursor:pointer;" onclick="Game.buyPlot()">
+                🟫 شراء أرض زراعية (50 💰)
             </div>
-            <div class="order-card" onclick="alert('قريباً: المخبز')">
-                <div style="font-size:30px;">🍞</div>
-                <div>المخبز<br><small>200 قطعة ذهبية</small></div>
+            <div style="background:#FFF3E0; padding:10px; margin:5px; border-radius:10px; cursor:pointer;" onclick="Game.buyCoop()">
+                🛖 شراء قن دجاج (100 💰)
             </div>
-            
-             <div style="margin-top:20px; border-top:2px dashed #8D6E63; padding-top:10px;">
-                <p>اشحن رصيدك</p>
-                <div id="ton-connect-btn"></div>
-             </div>
+            <div style="margin-top:20px;"><div id="ton-connect-btn"></div></div>
         </div>
     </div>
 
@@ -296,68 +200,50 @@
     </div>
 
     <script>
-        // === 1. الإعدادات ===
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // === إعدادات اللعبة ===
         const CONFIG = {
             crops: {
                 'wheat': { name: 'قمح', icon: '🌾', time: 3000, xp: 2, sell: 5 },
                 'corn': { name: 'ذرة', icon: '🌽', time: 6000, xp: 4, sell: 12 },
                 'carrot': { name: 'جزر', icon: '🥕', time: 10000, xp: 6, sell: 18 }
             },
-            products: {
-                'bread': { name: 'خبز', icon: '🍞', req: {wheat: 3}, time: 10000, sell: 30 },
-                'egg': { name: 'بيض', icon: '🥚', req: {}, time: 5000, sell: 10 }
+            animals: {
+                'chicken': { name: 'دجاج', icon: '🐔', product: 'egg', feed: 'wheat', time: 5000, xp: 5 }
             }
         };
 
-        // === 2. حالة اللعبة ===
+        // === حالة اللعبة ===
         let state = {
-            coins: 100,
-            gems: 5,
-            level: 1,
-            xp: 0,
-            maxXp: 50,
-            inventory: {
-                'wheat': 5, // بذور
-                'corn': 2,
-                'carrot': 0,
-                'bread': 0,
-                'egg': 0
-            },
+            coins: 100, gems: 5, level: 1, xp: 0, maxXp: 50,
+            inventory: { 'wheat': 5, 'corn': 2, 'carrot': 0, 'egg': 0 }, // أضفنا البيض
             grid: [
-                // 0: عشب، 1: أرض، 2: مخبز، 3: دجاج
                 {id:0, type:1, content:null}, {id:1, type:1, content:null}, {id:2, type:1, content:null},
-                {id:3, type:0, content:null}, {id:4, type:0, content:null}, {id:5, type:0, content:null},
-                // ... يمكن توسيع الشبكة
+                {id:3, type:2, content:null}, // النوع 2 هو قن الدجاج
+                {id:4, type:0, content:null}, {id:5, type:0, content:null}
             ]
         };
 
-        let currentTool = null; // 'scythe' or 'seed_wheat' ...
+        let currentTool = null;
 
-        // === 3. نظام TON ===
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect-btn'
-        });
-
-        // === 4. المنطق (Logic) ===
+        // === المنطق ===
         const Game = {
             init: function() {
-                if(localStorage.getItem('HayDay_v1')) {
-                    state = JSON.parse(localStorage.getItem('HayDay_v1'));
+                if(localStorage.getItem('HayDay_v2')) {
+                    state = JSON.parse(localStorage.getItem('HayDay_v2'));
                 }
                 UI.renderGrid();
                 UI.updateHeader();
                 
-                // حلقة النمو
+                // حلقة النمو والإنتاج
                 setInterval(() => {
                     let changed = false;
                     state.grid.forEach(tile => {
                         if(tile.content && tile.content.status === 'growing') {
-                            const crop = CONFIG.crops[tile.content.type];
-                            if(Date.now() - tile.content.startTime >= crop.time) {
+                            const duration = tile.type === 2 ? CONFIG.animals.chicken.time : CONFIG.crops[tile.content.type].time;
+                            if(Date.now() - tile.content.startTime >= duration) {
                                 tile.content.status = 'ready';
                                 changed = true;
                             }
@@ -367,48 +253,56 @@
                 }, 1000);
             },
 
-            save: function() {
-                localStorage.setItem('HayDay_v1', JSON.stringify(state));
-            },
+            save: function() { localStorage.setItem('HayDay_v2', JSON.stringify(state)); },
 
-            // الضغط على الأرض
             onTileClick: function(index) {
                 const tile = state.grid[index];
 
-                // 1. إذا كانت الأرض فارغة ولدينا أداة زراعة
-                if (tile.type === 1 && !tile.content && currentTool && currentTool.startsWith('seed_')) {
-                    const cropType = currentTool.split('_')[1];
-                    if (state.inventory[cropType] > 0) {
-                        state.inventory[cropType]--;
-                        tile.content = { type: cropType, status: 'growing', startTime: Date.now() };
-                        UI.floatText(`-${1} ${CONFIG.crops[cropType].icon}`, index);
-                        UI.playSound('plant');
-                    } else {
-                        tg.showAlert("نفذت البذور! اشترِ من المتجر أو احصد المزيد.");
+                // --- منطق الأرض الزراعية (Type 1) ---
+                if (tile.type === 1) {
+                    // زراعة
+                    if (!tile.content && currentTool && currentTool.startsWith('seed_')) {
+                        const crop = currentTool.split('_')[1];
+                        if (state.inventory[crop] > 0) {
+                            state.inventory[crop]--;
+                            tile.content = { type: crop, status: 'growing', startTime: Date.now() };
+                            UI.playSound('plant');
+                            UI.floatText(`-1 ${CONFIG.crops[crop].icon}`, index);
+                        } else tg.showAlert("لا تملك بذوراً!");
+                    }
+                    // حصاد
+                    else if (tile.content && tile.content.status === 'ready') {
+                        const crop = tile.content.type;
+                        state.inventory[crop] += 2;
+                        Game.addXp(CONFIG.crops[crop].xp);
+                        tile.content = null;
+                        UI.playSound('harvest');
+                        UI.floatText(`+2 ${CONFIG.crops[crop].icon}`, index);
                     }
                 }
                 
-                // 2. إذا كان المحصول جاهزاً ولدينا المنجل (أو بالضغط فقط)
-                else if (tile.type === 1 && tile.content && tile.content.status === 'ready') {
-                    const cropType = tile.content.type;
-                    const cropData = CONFIG.crops[cropType];
-                    
-                    // الحصاد يعطيك 2 (واحدة كبذرة وواحدة للبيع)
-                    state.inventory[cropType] += 2; 
-                    state.xp += cropData.xp;
-                    
-                    // التحقق من المستوى
-                    if(state.xp >= state.maxXp) {
-                        state.level++;
-                        state.xp = 0;
-                        state.maxXp *= 1.5;
-                        tg.showAlert(`مبروك! وصلت للمستوى ${state.level} 🎉`);
+                // --- منطق قن الدجاج (Type 2) ---
+                else if (tile.type === 2) {
+                    // إطعام الدجاج (اذا كان جائعاً/فارغاً)
+                    if (!tile.content) {
+                        if(state.inventory['wheat'] >= 1) {
+                            state.inventory['wheat']--;
+                            // الدجاج الآن يأكل
+                            tile.content = { type: 'chicken', status: 'growing', startTime: Date.now() }; 
+                            UI.playSound('plant');
+                            UI.floatText("-1 🌾", index);
+                        } else {
+                            tg.showAlert("الدجاج جائع ويحتاج إلى قمح 🌾!");
+                        }
                     }
-
-                    tile.content = null;
-                    UI.floatText(`+2 ${cropData.icon}`, index);
-                    UI.floatText(`+${cropData.xp} XP`, index, 100);
-                    UI.playSound('harvest');
+                    // جمع البيض
+                    else if (tile.content.status === 'ready') {
+                        state.inventory['egg']++;
+                        Game.addXp(CONFIG.animals.chicken.xp);
+                        tile.content = null; // يعود الدجاج جائعاً
+                        UI.playSound('harvest');
+                        UI.floatText("+1 🥚", index);
+                    }
                 }
 
                 Game.save();
@@ -416,170 +310,143 @@
                 UI.updateHeader();
             },
 
-            buyPlot: function() {
-                if(state.coins >= 50) {
-                    // البحث عن أول بلاطة عشب وتحويلها لأرض
-                    const grassIndex = state.grid.findIndex(t => t.type === 0);
-                    if(grassIndex !== -1) {
-                        state.coins -= 50;
-                        state.grid[grassIndex].type = 1; // تحويل لأرض
-                        Game.save();
-                        UI.renderGrid();
-                        UI.updateHeader();
-                        tg.showAlert("تم شراء أرض جديدة!");
-                    } else {
-                        tg.showAlert("لا يوجد مساحة للتوسع حالياً!");
-                    }
-                } else {
-                    tg.showAlert("ليس لديك ذهب كافٍ!");
+            addXp: function(amount) {
+                state.xp += amount;
+                if(state.xp >= state.maxXp) {
+                    state.level++; state.xp = 0; state.maxXp *= 1.5;
+                    tg.showAlert(`مبروك المستوى ${state.level}! 🎉`);
                 }
             },
+            
+            buyPlot: function() {
+                Game.expandGrid(1, 50);
+            },
+            
+            buyCoop: function() {
+                Game.expandGrid(2, 100);
+            },
 
-            completeOrder: function(orderIndex) {
-                // منطق وهمي للطلبات
-                state.coins += 50;
-                state.xp += 20;
-                document.getElementById(`order-${orderIndex}`).remove();
-                UI.updateHeader();
-                UI.floatText("+50 💰", 0); // في المنتصف
-                tg.HapticFeedback.notificationOccurred('success');
-                Game.save();
+            expandGrid: function(type, cost) {
+                if(state.coins >= cost) {
+                    const grassIdx = state.grid.findIndex(t => t.type === 0);
+                    if(grassIdx !== -1) {
+                        state.coins -= cost;
+                        state.grid[grassIdx].type = type;
+                        Game.save(); UI.renderGrid(); UI.updateHeader();
+                        tg.showAlert("تم البناء بنجاح!");
+                    } else tg.showAlert("لا توجد مساحة!");
+                } else tg.showAlert("لا يوجد ذهب كافٍ!");
             }
         };
 
-        // === 5. واجهة المستخدم (UI) ===
+        // === واجهة المستخدم ===
         const UI = {
             renderGrid: function() {
                 const gridEl = document.getElementById('grid');
                 gridEl.innerHTML = '';
-                
                 state.grid.forEach((tile, index) => {
                     const el = document.createElement('div');
-                    el.className = `tile ${tile.type === 1 ? 'farmland' : ''}`;
+                    // تحديد شكل البلاطة (أرض، عشب، أو دجاج)
+                    let className = 'tile';
+                    if(tile.type === 1) className += ' farmland';
+                    if(tile.type === 2) className += ' coop';
+                    el.className = className;
+                    
                     el.onclick = () => Game.onTileClick(index);
 
-                    // إضافة المحصول
                     if (tile.content) {
-                        const crop = CONFIG.crops[tile.content.type];
+                        const isAnimal = tile.type === 2;
+                        const info = isAnimal ? CONFIG.animals.chicken : CONFIG.crops[tile.content.type];
+                        const icon = (isAnimal && tile.content.status === 'ready') ? '🥚' : info.icon;
+                        
                         const sprite = document.createElement('div');
                         sprite.className = 'sprite';
-                        sprite.innerText = crop.icon;
+                        sprite.innerText = icon;
                         
-                        if(tile.content.status === 'growing') {
-                            el.classList.add('growing');
-                        } else {
-                            el.classList.add('ready');
-                        }
+                        if(tile.content.status === 'growing') el.classList.add('growing');
+                        else el.classList.add('ready');
+                        
+                        el.appendChild(sprite);
+                    } else if (tile.type === 2) {
+                        // عرض دجاجة صغيرة شفافة لتدل على أن المكان فارغ ويحتاج طعام
+                        const sprite = document.createElement('div');
+                        sprite.className = 'sprite';
+                        sprite.innerText = '🐔';
+                        sprite.style.opacity = '0.3';
+                        sprite.style.transform = 'rotateZ(45deg) rotateX(-60deg) scale(0.8)';
                         el.appendChild(sprite);
                     }
-                    
                     gridEl.appendChild(el);
                 });
             },
 
             updateHeader: function() {
                 document.getElementById('coins').innerText = Math.floor(state.coins);
-                document.getElementById('gems').innerText = state.gems;
                 document.getElementById('level').innerText = state.level;
+                document.getElementById('xp-bar').style.width = `${(state.xp / state.maxXp) * 100}%`;
                 
-                const pct = (state.xp / state.maxXp) * 100;
-                document.getElementById('xp-bar').style.width = `${pct}%`;
-
-                // تحديث عدد العناصر في الأزرار
-                let seedsCount = 0;
-                Object.keys(CONFIG.crops).forEach(k => seedsCount += state.inventory[k]);
-                document.getElementById('silo-count').innerText = seedsCount;
+                let seeds = 0;
+                ['wheat','corn','carrot'].forEach(k => seeds += state.inventory[k] || 0);
+                document.getElementById('silo-count').innerText = seeds;
+                
+                let prods = state.inventory['egg'] || 0;
+                document.getElementById('barn-count').innerText = prods;
             },
 
             openModal: function(id) {
                 document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
                 document.getElementById(`modal-${id}`).style.display = 'flex';
-                
-                if(id === 'silo') UI.renderSilo();
-                if(id === 'barn') UI.renderBarn();
-                if(id === 'orders') UI.renderOrders();
+                if(id === 'silo') UI.renderInventory('silo-grid', ['wheat','corn','carrot'], true);
+                if(id === 'barn') UI.renderInventory('barn-grid', ['egg'], false);
             },
-
-            closeAll: function() {
-                document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
-            },
-
-            renderSilo: function() {
-                const container = document.getElementById('silo-grid');
+            
+            renderInventory: function(containerId, items, isTool) {
+                const container = document.getElementById(containerId);
                 container.innerHTML = '';
-                Object.keys(CONFIG.crops).forEach(key => {
-                    const count = state.inventory[key];
-                    if(count > 0) {
+                items.forEach(key => {
+                    if(state.inventory[key] > 0) {
                         const div = document.createElement('div');
                         div.className = 'tool-btn';
                         div.style.width = '60px'; div.style.height = '60px';
-                        div.innerHTML = `${CONFIG.crops[key].icon}<span class="badge">${count}</span>`;
-                        div.onclick = () => {
-                            UI.selectTool(`seed_${key}`, CONFIG.crops[key].name);
-                            UI.closeAll();
-                        };
+                        const icon = CONFIG.crops[key] ? CONFIG.crops[key].icon : '🥚';
+                        div.innerHTML = `${icon}<span class="badge">${state.inventory[key]}</span>`;
+                        if(isTool) {
+                            div.onclick = () => {
+                                UI.selectTool(`seed_${key}`, CONFIG.crops[key].name);
+                                UI.closeAll();
+                            };
+                        }
                         container.appendChild(div);
                     }
                 });
             },
 
-            renderOrders: function() {
-                const list = document.getElementById('orders-list');
-                list.innerHTML = '';
-                // إنشاء طلب عشوائي للتجربة
-                const item = document.createElement('div');
-                item.className = 'order-card';
-                item.id = 'order-1';
-                item.innerHTML = `
-                    <div style="text-align:right">
-                        <strong>المدرسة</strong><br>
-                        <small>تحتاج: 3 🌾</small>
-                    </div>
-                    <div>
-                        <div style="color:#E65100; font-weight:bold;">50 💰</div>
-                        <div style="color:#00E676; font-size:12px;">20 XP</div>
-                    </div>
-                    <button onclick="Game.completeOrder(1)" style="background:#4CAF50; color:white; border:none; padding:5px 10px; border-radius:5px;">توصيل</button>
-                `;
-                list.appendChild(item);
+            closeAll: function() { document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none'); },
+            
+            selectTool: function(id, name) {
+                currentTool = id;
+                document.getElementById('current-tool-display').style.display = 'block';
+                document.getElementById('tool-name').innerText = name;
+                setTimeout(() => { currentTool = null; document.getElementById('current-tool-display').style.display = 'none'; }, 5000);
             },
 
-            selectTool: function(toolId, name) {
-                currentTool = toolId;
-                const display = document.getElementById('current-tool-display');
-                display.style.display = 'block';
-                document.getElementById('tool-name').innerText = `زراعة ${name}`;
-                
-                // إلغاء الاختيار بعد 5 ثواني
-                setTimeout(() => {
-                    currentTool = null;
-                    display.style.display = 'none';
-                }, 10000);
-            },
-
-            floatText: function(text, gridIndex, offset = 0) {
-                // حساب موقع تقريبي (ليس دقيقاً جداً بسبب الآيزومتري)
+            floatText: function(text, index) {
                 const floater = document.createElement('div');
-                floater.className = 'floater';
-                floater.innerText = text;
-                
-                // نضع النص في منتصف الشاشة للتسهيل، أو فوق الشبكة
-                const grid = document.getElementById('grid');
-                floater.style.left = '50%';
-                floater.style.top = '50%';
-                
+                floater.className = 'floater'; floater.innerText = text;
+                floater.style.left = '50%'; floater.style.top = '50%';
                 document.body.appendChild(floater);
                 setTimeout(() => floater.remove(), 1000);
             },
-
-            playSound: function(type) {
-                tg.HapticFeedback.impactOccurred(type === 'plant' ? 'light' : 'medium');
-            }
+            
+            playSound: function(type) { tg.HapticFeedback.impactOccurred('light'); }
         };
 
-        // تشغيل اللعبة
-        Game.init();
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
+            buttonRootId: 'ton-connect-btn'
+        });
 
+        Game.init();
     </script>
 </body>
 </html>
